@@ -1,4 +1,4 @@
-#Projet Réveil Russe#
+#Projet Réveil Russe
 
 ##Présentation
 
@@ -13,7 +13,14 @@ Nous avons l'objectif de créer une horloge à partir de ce type de tube, drivé
 Nous allons développer le mappage des composants ainsi que le programme de controle du MAX en python.
 
 
+##Documentation
+
+Nous allons utiliser un certain nombre de documents, que nous poserons dans le dossier Documentation.
+
 ##Auteurs
-Julien Alaimo
-Nans Faudon
-Raphaël Castanier
+
+Nous sommes étudiants en IUT d'informatique et à Polytech.
+
++	Julien Alaimo
++	Nans Faudon
++	Raphaël Castanier
