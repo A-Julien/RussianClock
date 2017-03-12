@@ -1,51 +1,59 @@
 #!/bin/python2.7
 
 
-# --- Bibliothèques ---
-import RPi.GPIO
+# --- Bibliotheques ---
+import RPi.GPIO as GPIO
 import time
 
 
 
 # --- Variables ---
-""" Brochage du PI3 à modifier """
-TEMPO = 100 # temporisation de l'execution des changements d'états (si besoin)
-DIN = 12 # data input du max (pin à définir)
-LOAD = 13 # loading (chargement du buffer sur le front descendant)
-CLK = 14 # ajoute DIN au buffer sur le front montant
-BLK = 15 # blank (niveau haut force sorties à bas, éteint l'affichage et éteint le max)
+""" Brochage du PI3 a modifier """
+TEMPO = 100 # temporisation de l'execution des changements d'etats (si besoin)
+DIN   = 11	# data input du max (pin a definir)
+LOAD  = 13  # loading (chargement du buffer sur le front descendant)
+CLK   = 15  # ajoute DIN au buffer sur le front montant
+BLK   = 29  # blank (niveau haut force sorties a bas, eteint l'affichage et eteint le max)
 
 
 # --- Initialisation des pin ---
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(DIN)
-GPIO.setup(LOAD, initial=0)
-GPIO.setup(BLK, initial=1)
-GPIO.setup(CLK)
+GPIO.setup(DIN, GPIO.OUT)
+GPIO.setup(LOAD, GPIO.OUT ,initial=0)
+GPIO.setup(BLK, GPIO.OUT, initial=0)
+GPIO.setup(CLK, GPIO.OUT)
 
 
 
 # --- Fonctions d'affichage ---
 def displayAll(state): 
-	""" Met tous les digits à l'état state """
-	GPIO.write(LOAD, 1) # mise du load au niveau haut
-	GPIO.write(DIN, state) # mise au niveau haut de data in
-	for x in range(19): # on remplit le buffer de '1' logiques
-		GPIO.write(CLK, 0) 
-		GPIO.write(CKL, 1)
-	GPIO.write(LOAD, 0) # le front descendant de load charge le buffer à l'affichage
+	""" Met tous les digits a l'etat state """
+	GPIO.output(LOAD, GPIO.HIGH) # mise du load au niveau haut
+	if state == 1:
+		GPIO.output(DIN, GPIO.HIGH) # mise au niveau haut de data in
+	else :
+		GPIO.output(DIN, GPIO.LOW) 
+
+	for x in range(20): # on remplit le buffer de '1' logiques
+		GPIO.output(CLK, GPIO.LOW) 
+		time.sleep(0.001)
+		GPIO.output(CLK, GPIO.HIGH)
+		time.sleep(0.001)
+	#time.sleep(0.001)
+	GPIO.output(LOAD, GPIO.LOW) # le front descendant de load charge le buffer a l'affichage
 
 
 
 
-""" On écrit ici une boucle qui tourne à l'infini pour mettre tous les digits à 1 ou à 0 """
+""" On ecrit ici une boucle qui tourne a l'infini pour mettre tous les digits a 1 ou a 0 """
 """ Sortie de la boucle si on tape '0' """
 while True:
 	displayAll(1)
-	time.sleep(1) # teporisation 1 seconde
+	time.sleep(0.5) # teporisation 1 seconde
 	displayAll(0)
-	if raw_input() == "0" :
-		break
+	time.sleep(0.5) # teporisation 1 seconde
+#	if raw_input() == "0" :
+#		break
 
 
 
